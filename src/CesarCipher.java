@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CesarCipher {
@@ -8,21 +9,21 @@ public class CesarCipher {
         this.alphabet = alphabet;
     }
 
-    public String encrypt(String text, int shift) {
+    public void encrypt(List<String> text, int shift) {
         if (shift <= 0) {
             throw new IllegalArgumentException("Shift must be more than zero");
         }
-        return doShift(text, shift);
+        text.replaceAll(string -> doShift(string, shift));
     }
 
-    public String decrypt(String encryptedText, int shift) {
+    public void decrypt(List<String> text, int shift) {
         if (shift <= 0) {
             throw new IllegalArgumentException("Shift must be more than zero");
         }
-        return doShift(encryptedText, -shift);
+        text.replaceAll(string -> doShift(string, -shift));
     }
 
-    private String doShift(String text, int shift) {
+    private String doShift(String string, int shift) {
         List<Character> newAlphabet = new ArrayList<>(alphabet.size());
         shift = shift % alphabet.size();
         for (int i = 0; i < alphabet.size(); i++) {
@@ -34,7 +35,7 @@ public class CesarCipher {
         }
 
         StringBuilder result = new StringBuilder();
-        for (char c : text.toCharArray()) {
+        for (char c : string.toCharArray()) {
             if (alphabet.contains(c)) {
                 result.append(newAlphabet.get(alphabet.indexOf(c)));
             } else {
