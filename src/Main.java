@@ -9,11 +9,14 @@ public class Main {
             'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'я', '.', ',', '«', '»',
             ':', '!', '?', ' ');
     private static final String MENU = """
+            ==========================
             Welcome to cryptoanalyser
             1. Crypt file
             2. Decrypt file with a key
             3. Brute force
-            4. Smart brute force""";
+            4. Smart brute force
+            0. exit
+            ==========================""";
     private static final Scanner scanner = new Scanner(System.in);
     private static final CesarCipher cipher = new CesarCipher(ALPHABET);
 
@@ -45,21 +48,49 @@ public class Main {
 
 
     public static void encryptFile() {
+        System.out.print("Enter key: ");
+        String keyStr = scanner.nextLine();
         System.out.print("Enter input file path: ");
         String inputFilePath = scanner.nextLine();
         System.out.print("Enter output file path: ");
         String outputFilePath = scanner.nextLine();
         try {
+            int key = Integer.parseInt(keyStr);
+            if (key <= 0) {
+                System.out.println("Key must be more than zero");
+            }
             List<String> text = FileManager.readFromFile(inputFilePath);
-            cipher.encrypt(text, 2);
-            int o = 0;
+            cipher.encrypt(text, key);
             FileManager.writeToFile(text, outputFilePath);
+            System.out.print("File has been successfully encrypted!");
+        } catch (NumberFormatException e) {
+            System.out.println("Key must be a number");
         } catch (IOException e) {
             System.out.println("Invalid file path");
         }
     }
 
     private static void decryptFile() {
+        System.out.print("Enter key: ");
+        String keyStr = scanner.nextLine();
+        System.out.print("Enter encrypted file path: ");
+        String inputFilePath = scanner.nextLine();
+        System.out.print("Enter output file path: ");
+        String outputFilePath = scanner.nextLine();
+        try {
+            int key = Integer.parseInt(keyStr);
+            if (key <= 0) {
+                System.out.println("Key must be more than zero");
+            }
+            List<String> text = FileManager.readFromFile(inputFilePath);
+            cipher.decrypt(text, key);
+            FileManager.writeToFile(text, outputFilePath);
+            System.out.print("File has been successfully encrypted!");
+        } catch (NumberFormatException e) {
+            System.out.println("Key must be a number");
+        } catch (IOException e) {
+            System.out.println("Invalid file path");
+        }
     }
 
     private static void BruteForce() {
